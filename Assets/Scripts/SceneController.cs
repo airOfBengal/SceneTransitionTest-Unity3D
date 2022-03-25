@@ -15,6 +15,9 @@ public class SceneController : MonoBehaviour
     public GameObject cameraPrefab;
     public GameObject directionalLightPrefab;
     public GameObject eventSystemPrefab;
+    public GameObject timelineLinkImagePrefab;
+    private GameObject canvas;
+    public float sceneTransitionDelay = 0.5f;
 
     private void Awake()
     {
@@ -26,7 +29,6 @@ public class SceneController : MonoBehaviour
         {
             instance = this;
         }
-        //DontDestroyOnLoad(gameObject);
     }
 
     // Start is called before the first frame update
@@ -48,7 +50,7 @@ public class SceneController : MonoBehaviour
             Instantiate(eventSystemPrefab);
         }
         PopulateTimelineItems();
-        UpdateTimelineItemBackground(currentSceneIndexString);
+        StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
     }
 
     public void LoadNextScene(string sceneIndexString)
@@ -56,21 +58,19 @@ public class SceneController : MonoBehaviour
         if (currentSceneIndexString == "2" && sceneIndexString == "3")
         {
             SceneManager.LoadSceneAsync("Scene" + sceneIndexString, LoadSceneMode.Additive);
-            UpdateTimelineItemBackground(sceneIndexString);
+            StartCoroutine(UpdateTimelineItemBackground(sceneIndexString));
         }
         else
         {
             SceneManager.LoadSceneAsync("Scene" + sceneIndexString);
-            //PopulateTimelineItems();
         }
-        currentSceneIndexString = sceneIndexString;        
-        //UpdateTimelineItemBackground(currentSceneIndexString);
+        currentSceneIndexString = sceneIndexString;
     }
 
     public void PopulateTimelineItems()
     {
         GameObject timeline = Instantiate(timelineItemsLinkPrefab);
-        GameObject canvas = GameObject.Find("Canvas");
+        canvas = GameObject.Find("Canvas");
         timeline.transform.SetParent(canvas.transform, false);
         timelineItemsParent = timeline.transform;
         noOfScenes = SceneManager.sceneCountInBuildSettings;
@@ -84,10 +84,15 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    private void UpdateTimelineItemBackground(string sceneIndexString)
+    IEnumerator UpdateTimelineItemBackground(string sceneIndexString)
     {
 
         Debug.Log("current scene index: " + sceneIndexString);
+
+        GameObject timelineLinkImageGO = Instantiate(timelineLinkImagePrefab);
+        timelineLinkImageGO.transform.SetParent(canvas.transform, false);
+        Transform startTransform = null, endTransform = null;
+
         foreach (Transform t in timelineItemsParent)
         {
             TimelineItem timelineItem = t.gameObject.GetComponent<TimelineItem>();
@@ -100,5 +105,23 @@ public class SceneController : MonoBehaviour
                 timelineItem.UpdateBackgroundColor(false);
             }
         }
+
+        yield return new WaitForEndOfFrame();
+
+        int i = 1;
+        foreach(Transform t in timelineItemsParent)
+        {
+            if (i == 1)
+            {
+                startTransform = t;
+            }
+            else if(i == noOfScenes)
+            {
+                endTransform = t;
+            }
+            i++;
+        }
+
+        timelineLinkImageGO.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(endTransform.position.x - startTransform.position.x), 5f);
     }
 }
