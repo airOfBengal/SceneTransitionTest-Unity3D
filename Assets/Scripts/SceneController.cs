@@ -31,6 +31,11 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void MakeTransition()
+    {
+        LoadNextScene((int.Parse(currentSceneIndexString)+1).ToString());
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,14 +62,23 @@ public class SceneController : MonoBehaviour
     {
         if (currentSceneIndexString == "2" && sceneIndexString == "3")
         {
-            SceneManager.LoadSceneAsync("Scene" + sceneIndexString, LoadSceneMode.Additive);
-            StartCoroutine(UpdateTimelineItemBackground(sceneIndexString));
+            SceneManager.LoadScene("Scene" + sceneIndexString, LoadSceneMode.Additive);
         }
         else
         {
             SceneManager.LoadSceneAsync("Scene" + sceneIndexString);
         }
         currentSceneIndexString = sceneIndexString;
+    }
+
+    IEnumerator LoadSceneAsync(string sceneIndexString)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Scene" + sceneIndexString, LoadSceneMode.Additive);
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+        StartCoroutine(UpdateTimelineItemBackground(sceneIndexString));
     }
 
     public void PopulateTimelineItems()
