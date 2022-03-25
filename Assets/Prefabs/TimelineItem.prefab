@@ -53,6 +53,7 @@ MonoBehaviour:
   sceneTransitionButtonText: {fileID: 3750169009470906902}
   defaultBGColor: {r: 0.43529415, g: 0.43529415, b: 0.43529415, a: 1}
   activeBGColor: {r: 0, g: 0, b: 0, a: 1}
+  sceneController: {fileID: 6621201938598974303, guid: 9b780ac3c4a4cde4faab4a01dc17c63e, type: 3}
 --- !u!1 &3750169008789607855
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +174,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3750169008789607842}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3750169008367043827}
+        m_TargetAssemblyTypeName: TimelineItem, Assembly-CSharp
+        m_MethodName: OnClickSceneTransitionButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3750169009470906896
 GameObject:
   m_ObjectHideFlags: 0

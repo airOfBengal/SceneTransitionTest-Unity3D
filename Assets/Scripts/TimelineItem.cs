@@ -9,6 +9,7 @@ public class TimelineItem : MonoBehaviour
     public Text sceneTransitionButtonText;
     public Color defaultBGColor;
     public Color activeBGColor;
+    public SceneController sceneController;
 
     public void UpdateBackgroundColor(bool isActive)
     {
@@ -30,5 +31,10 @@ public class TimelineItem : MonoBehaviour
     public string GetButtonText()
     {
         return sceneTransitionButtonText.text;
+    }
+
+    public void OnClickSceneTransitionButton()
+    {
+        sceneController.LoadNextScene(sceneTransitionButtonText.text);
     }
 }

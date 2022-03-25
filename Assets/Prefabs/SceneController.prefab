@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6621201938598974301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6621201938598974300}
+  - component: {fileID: 6621201938598974303}
+  m_Layer: 0
+  m_Name: SceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6621201938598974300
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6621201938598974301}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6621201938598974303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6621201938598974301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3a264ab46e727342bb6e46a37c2ed2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timelineItemPrefab: {fileID: 3750169008367043837, guid: cce2de3ce02355a418ba641ac6a2114f, type: 3}
+  timelineItemsLinkPrefab: {fileID: 3883870147827186349, guid: 00ac2cf3252075047a7692f9e486a020, type: 3}
+  cameraPrefab: {fileID: 5635044918836222508, guid: 48695518091e6a247a64978a14dc2d9d, type: 3}
+  directionalLightPrefab: {fileID: 8630146561228479278, guid: e9b51a67315188b43926648f61e861e9, type: 3}
+  eventSystemPrefab: {fileID: 8829193785480835711, guid: aaa16c6b916be0543990cefc0c1377c8, type: 3}
