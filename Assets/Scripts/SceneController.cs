@@ -12,17 +12,21 @@ public class SceneController : MonoBehaviour
     public GameObject timelineItemPrefab;
     public GameObject timelineItemsLinkPrefab;
     private static string currentSceneIndexString = "1";
+    private static string prevSceneIndexString = "1";
     public GameObject cameraPrefab;
     public GameObject directionalLightPrefab;
     public GameObject eventSystemPrefab;
     public GameObject timelineLinkImagePrefab;
-    private GameObject canvas;
+    private static GameObject canvas;
     public float sceneTransitionDelay = 0.5f;
 
     private void Awake()
     {
-        if(instance != null)
+        //Debug.Log("awake called in scene " + currentSceneIndexString);
+        
+        if (instance != null)
         {
+            StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
             Destroy(gameObject);
         }
         else
@@ -37,8 +41,9 @@ public class SceneController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
+        Debug.Log("start called in scene" + currentSceneIndexString);
         GameObject camera = GameObject.Find("Main Camera");
         if(camera == null)
         {
@@ -55,20 +60,23 @@ public class SceneController : MonoBehaviour
             Instantiate(eventSystemPrefab);
         }
         PopulateTimelineItems();
-        StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
+        yield return StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
+        DrawTimelineLink();
     }
 
     public void LoadNextScene(string sceneIndexString)
     {
-        if (currentSceneIndexString == "2" && sceneIndexString == "3")
+        prevSceneIndexString = currentSceneIndexString;
+        currentSceneIndexString = sceneIndexString;
+
+        if (prevSceneIndexString == "2" && sceneIndexString == "3")
         {
-            SceneManager.LoadScene("Scene" + sceneIndexString, LoadSceneMode.Additive);
+            SceneManager.LoadScene("Scene" + currentSceneIndexString, LoadSceneMode.Additive);
         }
         else
         {
-            SceneManager.LoadSceneAsync("Scene" + sceneIndexString);
+            SceneManager.LoadScene("Scene" + currentSceneIndexString);
         }
-        currentSceneIndexString = sceneIndexString;
     }
 
     IEnumerator LoadSceneAsync(string sceneIndexString)
@@ -100,12 +108,7 @@ public class SceneController : MonoBehaviour
 
     IEnumerator UpdateTimelineItemBackground(string sceneIndexString)
     {
-
-        Debug.Log("current scene index: " + sceneIndexString);
-
-        GameObject timelineLinkImageGO = Instantiate(timelineLinkImagePrefab);
-        timelineLinkImageGO.transform.SetParent(canvas.transform, false);
-        Transform startTransform = null, endTransform = null;
+        Debug.Log("current scene index: " + sceneIndexString);       
 
         foreach (Transform t in timelineItemsParent)
         {
@@ -120,16 +123,23 @@ public class SceneController : MonoBehaviour
             }
         }
 
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();        
+    }
+
+    private void DrawTimelineLink()
+    {
+        GameObject timelineLinkImageGO = Instantiate(timelineLinkImagePrefab);
+        timelineLinkImageGO.transform.SetParent(canvas.transform, false);
+        Transform startTransform = null, endTransform = null;
 
         int i = 1;
-        foreach(Transform t in timelineItemsParent)
+        foreach (Transform t in timelineItemsParent)
         {
             if (i == 1)
             {
                 startTransform = t;
             }
-            else if(i == noOfScenes)
+            else if (i == noOfScenes)
             {
                 endTransform = t;
             }

@@ -6,7 +6,8 @@ public class Sphere : MonoBehaviour
 {
     public float rotationAroundSpeed = 45f;
     public float transitionSpeed = 10f;
-    public volatile bool isPressedOnIt = false;
+    public bool isPressedOnIt = false;
+    public bool isMoved = false;
     public SceneController sceneController;
     private Animator animator;
 
@@ -18,9 +19,15 @@ public class Sphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isPressedOnIt)
+        if (isPressedOnIt && !isMoved)
         {
             transform.position = Vector3.MoveTowards(transform.position, Vector3.zero, transitionSpeed * Time.deltaTime);
+
+            if(Mathf.Abs(transform.position.x) <= Mathf.Epsilon)
+            {
+                isMoved = true;
+            }
+
             return;
         }
         transform.Rotate(Vector3.forward, rotationAroundSpeed * Time.deltaTime);
@@ -28,6 +35,7 @@ public class Sphere : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log("clicked on sphere!");
         if (!isPressedOnIt)
         {
             isPressedOnIt = true;
