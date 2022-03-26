@@ -21,6 +21,9 @@ public class SceneController : MonoBehaviour
     private static GameObject canvasFadeInGO;
     private static GameObject canvasFadeOutGO;
 
+    public GameObject[] sphereGameObjects;
+    private static Sphere[] spheres;
+
     private void Awake()
     {
         //Debug.Log("awake called in scene " + currentSceneIndexString);
@@ -72,6 +75,17 @@ public class SceneController : MonoBehaviour
             canvasFadeOutGO.SetActive(false);
         }
 
+        if (currentSceneIndexString == "2")
+        {            
+            spheres = new Sphere[sphereGameObjects.Length];
+            for(int i = 0; i < spheres.Length; i++)
+            {
+                spheres[i] = sphereGameObjects[i].GetComponent<Sphere>();
+                //Debug.Log("sphere " + i + " is null: " + spheres[i] == null);
+            }
+            //Debug.Log("spheres len: " + spheres.Length);
+        }
+
         PopulateTimelineItems();
         yield return StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
         DrawTimelineLink();
@@ -81,6 +95,21 @@ public class SceneController : MonoBehaviour
     {
         prevSceneIndexString = currentSceneIndexString;
         currentSceneIndexString = sceneIndexString;
+        Debug.Log("prev scene: " + prevSceneIndexString + " curr scene: " + currentSceneIndexString);
+        if (prevSceneIndexString == "2" && currentSceneIndexString == "3")
+        {
+            Debug.Log("spheres len: " + spheres.Length);
+            foreach (Sphere sphere in spheres)
+            {
+                Debug.Log("pressed on sphere: " + sphere.isPressedOnIt);
+                if (!sphere.isPressedOnIt)
+                {
+                    sphere.shouldRotate = false;
+                    sphere.FadeOut();
+                }
+            }
+        }
+
         if (!(prevSceneIndexString == "2" && currentSceneIndexString == "3"))
         {
             canvasFadeInGO.SetActive(true);
@@ -125,7 +154,7 @@ public class SceneController : MonoBehaviour
 
     IEnumerator UpdateTimelineItemBackground(string sceneIndexString)
     {
-        Debug.Log("current scene index: " + sceneIndexString);       
+        //Debug.Log("current scene index: " + sceneIndexString);       
 
         foreach (Transform t in timelineItemsParent)
         {
