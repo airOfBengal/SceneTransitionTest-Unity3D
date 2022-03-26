@@ -89,7 +89,6 @@ public class SceneController : MonoBehaviour
 
     public IEnumerator LoadSceneCoroutine()
     {
-        yield return new WaitForSeconds(1f);
         AsyncOperation asyncOperation = null;
         if (prevSceneIndexString == "2" && currentSceneIndexString == "3")
         {
