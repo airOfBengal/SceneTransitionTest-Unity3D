@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +17,9 @@ public class SceneController : MonoBehaviour
     public GameObject timelineLinkImagePrefab;
     private static GameObject canvas;
     public float sceneTransitionDelay = 0.5f;
+
+    private static GameObject canvasFadeInGO;
+    private static GameObject canvasFadeOutGO;
 
     private void Awake()
     {
@@ -43,7 +44,7 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        Debug.Log("start called in scene" + currentSceneIndexString);
+        //Debug.Log("start called in scene" + currentSceneIndexString);
         GameObject camera = GameObject.Find("Main Camera");
         if(camera == null)
         {
@@ -59,6 +60,18 @@ public class SceneController : MonoBehaviour
         {
             Instantiate(eventSystemPrefab);
         }
+
+        canvas = GameObject.Find("Canvas");
+        canvasFadeInGO = canvas.transform.Find("FadeInImage").gameObject;
+        canvasFadeOutGO = canvas.transform.Find("FadeOutImage").gameObject;
+
+        if (currentSceneIndexString != prevSceneIndexString)
+        {
+            canvasFadeOutGO.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            canvasFadeOutGO.SetActive(false);
+        }
+
         PopulateTimelineItems();
         yield return StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
         DrawTimelineLink();
@@ -68,31 +81,36 @@ public class SceneController : MonoBehaviour
     {
         prevSceneIndexString = currentSceneIndexString;
         currentSceneIndexString = sceneIndexString;
-
-        if (prevSceneIndexString == "2" && sceneIndexString == "3")
+        if (!(prevSceneIndexString == "2" && currentSceneIndexString == "3"))
         {
-            SceneManager.LoadScene("Scene" + currentSceneIndexString, LoadSceneMode.Additive);
-        }
-        else
-        {
-            SceneManager.LoadScene("Scene" + currentSceneIndexString);
+            canvasFadeInGO.SetActive(true);
         }
     }
 
-    IEnumerator LoadSceneAsync(string sceneIndexString)
+    public IEnumerator LoadSceneCoroutine()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Scene" + sceneIndexString, LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
+        yield return new WaitForSeconds(1f);
+        AsyncOperation asyncOperation = null;
+        if (prevSceneIndexString == "2" && currentSceneIndexString == "3")
+        {
+            asyncOperation = SceneManager.LoadSceneAsync("Scene" + currentSceneIndexString, LoadSceneMode.Additive);
+        }
+        else        
+        {            
+            asyncOperation = SceneManager.LoadSceneAsync("Scene" + currentSceneIndexString);
+        }
+
+        while (!asyncOperation.isDone)
         {
             yield return null;
         }
-        StartCoroutine(UpdateTimelineItemBackground(sceneIndexString));
+
+        canvasFadeInGO.SetActive(false);
     }
 
     public void PopulateTimelineItems()
     {
-        GameObject timeline = Instantiate(timelineItemsLinkPrefab);
-        canvas = GameObject.Find("Canvas");
+        GameObject timeline = Instantiate(timelineItemsLinkPrefab);        
         timeline.transform.SetParent(canvas.transform, false);
         timelineItemsParent = timeline.transform;
         noOfScenes = SceneManager.sceneCountInBuildSettings;

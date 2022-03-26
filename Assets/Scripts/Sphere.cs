@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Sphere : MonoBehaviour
@@ -40,6 +38,7 @@ public class Sphere : MonoBehaviour
         {
             isPressedOnIt = true;
             sceneController.MakeTransition();
+            StartCoroutine(sceneController.LoadSceneCoroutine());
         }
     }
 

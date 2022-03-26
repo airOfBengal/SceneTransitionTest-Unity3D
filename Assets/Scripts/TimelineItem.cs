@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,5 +34,6 @@ public class TimelineItem : MonoBehaviour
     public void OnClickSceneTransitionButton()
     {
         sceneController.LoadNextScene(sceneTransitionButtonText.text);
+        StartCoroutine(sceneController.LoadSceneCoroutine());
     }
 }
