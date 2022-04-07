@@ -47,6 +47,12 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        canvas = GameObject.Find("Canvas");
+        // Draw timeline
+        PopulateTimelineItems();
+        yield return StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
+        DrawTimelineLink();
+
         //Debug.Log("start called in scene" + currentSceneIndexString);
         GameObject camera = GameObject.Find("Main Camera");
         if(camera == null)
@@ -64,7 +70,7 @@ public class SceneController : MonoBehaviour
             Instantiate(eventSystemPrefab);
         }
 
-        canvas = GameObject.Find("Canvas");
+        
         canvasFadeInGO = canvas.transform.Find("FadeInImage").gameObject;
         canvasFadeOutGO = canvas.transform.Find("FadeOutImage").gameObject;
 
@@ -85,10 +91,6 @@ public class SceneController : MonoBehaviour
             }
             //Debug.Log("spheres len: " + spheres.Length);
         }
-
-        PopulateTimelineItems();
-        yield return StartCoroutine(UpdateTimelineItemBackground(currentSceneIndexString));
-        DrawTimelineLink();
     }
 
     public void LoadNextScene(string sceneIndexString)
