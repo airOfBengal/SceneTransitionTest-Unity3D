@@ -93,7 +93,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    public void StartNextScene(object sender, string sceneIndexString)
+    public void StartNextScene(string sceneIndexString)
     {
         if (sceneIndexString == currentSceneIndexString)
         {
@@ -160,7 +160,7 @@ public class SceneController : MonoBehaviour
             go.transform.SetParent(timelineItemsParent, false);
             TimelineItem timelineItem = go.GetComponent<TimelineItem>();
             timelineItem.sceneTransitionButtonText.text = i.ToString();
-            timelineItem.OnClickTimelineItemEventHandler += StartNextScene;
+            timelineItem.OnClickTimelineItemAction += StartNextScene;
         }
     }
 

@@ -9,7 +9,7 @@ public class TimelineItem : MonoBehaviour
     public Color defaultBGColor;
     public Color activeBGColor;
 
-    public event EventHandler<string> OnClickTimelineItemEventHandler;
+    public event Action<string> OnClickTimelineItemAction;
 
     public void UpdateBackgroundColor(bool isActive)
     {
@@ -35,6 +35,6 @@ public class TimelineItem : MonoBehaviour
 
     public void OnClickSceneTransitionButton()
     {
-        OnClickTimelineItemEventHandler?.Invoke(this, sceneTransitionButtonText.text);
+        OnClickTimelineItemAction?.Invoke(sceneTransitionButtonText.text);
     }
 }
