@@ -145,7 +145,6 @@ public class SceneController : MonoBehaviour
         for (int i=1;i<= noOfScenes; i++)
         {
             GameObject go = Instantiate(timelineItemPrefab);
-            //UnityEditor.Selection.activeObject = go;
             go.transform.SetParent(timelineItemsParent, false);
             TimelineItem timelineItem = go.GetComponent<TimelineItem>();
             timelineItem.sceneTransitionButtonText.text = i.ToString();
@@ -154,8 +153,6 @@ public class SceneController : MonoBehaviour
 
     IEnumerator UpdateTimelineItemBackground(string sceneIndexString)
     {
-        //Debug.Log("current scene index: " + sceneIndexString);       
-
         foreach (Transform t in timelineItemsParent)
         {
             TimelineItem timelineItem = t.gameObject.GetComponent<TimelineItem>();
@@ -176,22 +173,22 @@ public class SceneController : MonoBehaviour
     {
         GameObject timelineLinkImageGO = Instantiate(timelineLinkImagePrefab);
         timelineLinkImageGO.transform.SetParent(canvas.transform, false);
-        Transform startTransform = null, endTransform = null;
+        float startX = 0, endX = 0;
 
         int i = 1;
         foreach (Transform t in timelineItemsParent)
         {
             if (i == 1)
             {
-                startTransform = t;
+                startX = t.gameObject.GetComponent<RectTransform>().anchoredPosition.x;
             }
             else if (i == noOfScenes)
             {
-                endTransform = t;
+                endX = t.gameObject.GetComponent<RectTransform>().anchoredPosition.x;
             }
             i++;
         }
-
-        timelineLinkImageGO.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(endTransform.position.x - startTransform.position.x), 5f);
+        //Debug.Log("end transform pos: " + endX + " start transform pos: " + startX);
+        timelineLinkImageGO.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Abs(endX - startX), 5f);
     }
 }
