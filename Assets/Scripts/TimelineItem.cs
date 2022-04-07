@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,8 @@ public class TimelineItem : MonoBehaviour
     public Text sceneTransitionButtonText;
     public Color defaultBGColor;
     public Color activeBGColor;
-    public SceneController sceneController;
+
+    public event EventHandler<string> OnClickTimelineItemEventHandler;
 
     public void UpdateBackgroundColor(bool isActive)
     {
@@ -33,12 +35,6 @@ public class TimelineItem : MonoBehaviour
 
     public void OnClickSceneTransitionButton()
     {
-        if(sceneTransitionButtonText.text == SceneController.currentSceneIndexString)
-        {
-            return;
-        }
-
-        sceneController.LoadNextScene(sceneTransitionButtonText.text);
-        StartCoroutine(sceneController.LoadSceneCoroutine());
+        OnClickTimelineItemEventHandler?.Invoke(this, sceneTransitionButtonText.text);
     }
 }

@@ -9,8 +9,8 @@ public class SceneController : MonoBehaviour
     private static Transform timelineItemsParent;
     public GameObject timelineItemPrefab;
     public GameObject timelineItemsLinkPrefab;
-    public static string currentSceneIndexString = "1";
-    public static string prevSceneIndexString = "1";
+    private static string currentSceneIndexString = "1";
+    private static string prevSceneIndexString = "1";
     public GameObject cameraPrefab;
     public GameObject directionalLightPrefab;
     public GameObject eventSystemPrefab;
@@ -93,6 +93,16 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    public void StartNextScene(object sender, string sceneIndexString)
+    {
+        if (sceneIndexString == currentSceneIndexString)
+        {
+            return;
+        }
+        LoadNextScene(sceneIndexString);
+        StartCoroutine(LoadSceneCoroutine());
+    }
+
     public void LoadNextScene(string sceneIndexString)
     {
         prevSceneIndexString = currentSceneIndexString;
@@ -150,6 +160,7 @@ public class SceneController : MonoBehaviour
             go.transform.SetParent(timelineItemsParent, false);
             TimelineItem timelineItem = go.GetComponent<TimelineItem>();
             timelineItem.sceneTransitionButtonText.text = i.ToString();
+            timelineItem.OnClickTimelineItemEventHandler += StartNextScene;
         }
     }
 
