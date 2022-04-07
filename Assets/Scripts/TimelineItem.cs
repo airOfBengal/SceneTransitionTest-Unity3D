@@ -33,6 +33,11 @@ public class TimelineItem : MonoBehaviour
 
     public void OnClickSceneTransitionButton()
     {
+        if(sceneTransitionButtonText.text == SceneController.currentSceneIndexString)
+        {
+            return;
+        }
+
         sceneController.LoadNextScene(sceneTransitionButtonText.text);
         StartCoroutine(sceneController.LoadSceneCoroutine());
     }

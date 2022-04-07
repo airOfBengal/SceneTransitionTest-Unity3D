@@ -9,8 +9,8 @@ public class SceneController : MonoBehaviour
     private static Transform timelineItemsParent;
     public GameObject timelineItemPrefab;
     public GameObject timelineItemsLinkPrefab;
-    private static string currentSceneIndexString = "1";
-    private static string prevSceneIndexString = "1";
+    public static string currentSceneIndexString = "1";
+    public static string prevSceneIndexString = "1";
     public GameObject cameraPrefab;
     public GameObject directionalLightPrefab;
     public GameObject eventSystemPrefab;
